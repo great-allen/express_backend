@@ -1,3 +1,5 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import express from 'express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -9,9 +11,22 @@ import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import passport from 'passport'
 import './strategies/local'
+
+
+if (typeof process.env.MY_SECRET !== "string") {
+  throw new Error("MY_SECRET is not defined");
+}
+declare namespace NodeJS {
+  interface ProcessEnv {
+    MY_SECRET: string;
+  }
+}
 const app=express()
+const mySecret=process.env.MY_SECRET
+
+
 app.use(session({
-  secret:"keyboard cat",
+ secret: mySecret,
  saveUninitialized:false,
  resave:false,
  store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/backend_test' })

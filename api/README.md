@@ -9,6 +9,7 @@ Step 2.
 install all the dependencies:
 For express:
 
+npm i dotenv
 npm i express
 npm i express-session
 npm install mongoose --save
@@ -23,9 +24,10 @@ npm i compression
 npm i ts-node
 
 dependencies for ts:
+npm i -D @types/node
+npm install -D @types/nodemon
 npm i -D typescript
 npm i -D ts-node
-npm i -D nodemon
 npm i -D mongoose
 npm install -D @faker-js/faker
 npm install -D @types/body-parser
@@ -41,5 +43,29 @@ npm i -D @types/compression
 setup nodemon config.json file
 
 Step 3.
+setup .env file to make sure your environment variables tape safe.
+
+-create a new file under root of the application called process-env.d.ts
+-global declaration:
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      MY_SECRET: string;
+    }
+  }
+}
+export{}
+
+-do somewhere in the highest level of our app code a validation like this:
+if (typeof process.env.MY_SECRET !== "string") {
+  throw new Error("MY_SECRET is not defined");
+}
+declare namespace NodeJS {
+  interface ProcessEnv {
+    MY_SECRET: string;
+  }
+}
+
+Step 4.
 
 run npx ts-node seed.ts to seed data.
